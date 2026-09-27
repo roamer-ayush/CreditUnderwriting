@@ -1,0 +1,31 @@
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python Bytecode and Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+.pytest_cache/
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Data Files
+data/raw/*.csv
+data/processed/*.csv
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# IDEs & System Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
