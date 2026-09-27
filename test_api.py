@@ -24,6 +24,14 @@ def test_health_endpoint():
     print("[PASS] GET /health: Model and SHAP Explainer are operational.")
 
 
+def test_dashboard_ui_endpoint():
+    """Verify that root URL serves the interactive web dashboard."""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Credit Underwriting & Default Scoring Engine" in response.text
+    print("[PASS] GET /: Interactive Web Dashboard served successfully with HTML.")
+
+
 def test_predict_subprime_borrower():
     """Phase 18: Test POST /predict with high-risk borrower (from roadmap)."""
     payload = {
@@ -108,6 +116,7 @@ if __name__ == "__main__":
     print("RUNNING CREDIT UNDERWRITING API VERIFICATION SUITE")
     print("=" * 60)
     test_health_endpoint()
+    test_dashboard_ui_endpoint()
     test_predict_subprime_borrower()
     test_predict_prime_borrower()
     test_invalid_input_rejection()

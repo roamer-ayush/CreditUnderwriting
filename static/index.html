@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explainable Credit Underwriting & Default Scoring Engine</title>
+  
+  <!-- Modern Typography: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Institutional Navigation Bar -->
+  <header class="top-nav">
+    <div class="brand-section">
+      <div class="bank-logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">Credit Underwriting & Default Scoring Engine</div>
+        <div class="brand-subtitle">
+          <span>Retail Risk Analytics</span>
+          <span class="brand-badge">IndusInd Bank Ready</span>
+          <span class="brand-badge">XAI Compliant</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-status-group">
+      <div class="status-pill" id="system-status-pill">
+        <span class="pulse-dot"></span>
+        <span id="system-status-text">XGBoost & SHAP Active</span>
+      </div>
+      <button class="nav-link-btn" id="open-metrics-modal-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10M12 20V4M6 20v-6"></path>
+        </svg>
+        Model Metrics
+      </button>
+      <a href="/docs" target="_blank" class="nav-link-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        Swagger Docs
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="app-container">
+
+    <!-- Archetype Quick-Load Bar -->
+    <section class="archetype-bar">
+      <div class="archetype-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+        Applicant Archetypes:
+      </div>
+      <div class="archetype-btn-group">
+        <button class="archetype-btn btn-prime" id="load-prime-btn">
+          <span>Prime Applicant (Low Risk)</span>
+        </button>
+        <button class="archetype-btn btn-borderline" id="load-borderline-btn">
+          <span>Borderline (Manual Review)</span>
+        </button>
+        <button class="archetype-btn btn-subprime" id="load-subprime-btn">
+          <span>Subprime (Adverse Action)</span>
+        </button>
+        <button class="archetype-btn btn-reset" id="reset-form-btn">
+          <span>Reset</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Grid: Application Form (Left) & Assessment (Right) -->
+    <div class="main-grid">
+      
+      <!-- Left Column: Borrower Application Form -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+            Borrower Application Form
+          </div>
+          <span class="card-badge">Pydantic Validated</span>
+        </div>
+
+        <form id="underwriting-form">
+          
+          <!-- Field 1: Age -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="age-input" class="field-label">Borrower Age</label>
+              <span class="value-display" id="age-val-display">42 yrs</span>
+            </div>
+            <div class="input-slider-wrapper">
+              <input type="range" class="slider-range" id="age-slider" min="18" max="75" value="42">
+              <input type="number" class="num-input" id="age-input" min="18" max="100" value="42">
+            </div>
+            <div class="error-msg" id="age-error">Age must be between 18 and 100 years.</div>
+          </div>
+
+          <!-- Field 2: Annual Income -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="income-input" class="field-label">Verified Annual Income</label>
+              <span class="value-display" id="income-val-display">$65,000</span>
+            </div>
+            <div class="input-slider-wrapper">
+              <input type="range" class="slider-range" id="income-slider" min="15000" max="350000" step="1000" value="65000">
+              <input type="number" class="num-input" id="income-input" min="1" step="1000" value="65000">
+            </div>
+            <div class="error-msg" id="income-error">Verified income must be strictly greater than $0.</div>
+          </div>
+
+          <!-- Field 3: Loan Amount -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="loan-input" class="field-label">Requested Loan Amount</label>
+              <span class="value-display" id="loan-val-display">$350,000</span>
+            </div>
+            <div class="input-slider-wrapper">
+              <input type="range" class="slider-range" id="loan-slider" min="5000" max="600000" step="5000" value="350000">
+              <input type="number" class="num-input" id="loan-input" min="1" step="1000" value="350000">
+            </div>
+            <div class="error-msg" id="loan-error">Loan amount must be strictly greater than $0.</div>
+          </div>
+
+          <!-- Field 4: Credit Score -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="credit-score-input" class="field-label">Credit Bureau Score (FICO / CIBIL)</label>
+              <span class="value-display" id="score-val-display">580</span>
+            </div>
+            <div class="input-slider-wrapper">
+              <input type="range" class="slider-range" id="credit-score-slider" min="300" max="850" value="580">
+              <input type="number" class="num-input" id="credit-score-input" min="300" max="850" value="580">
+            </div>
+            <div class="error-msg" id="score-error">Credit bureau score must be between 300 and 850.</div>
+          </div>
+
+          <!-- Field 5: Past Default History -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="default-history-input" class="field-label">Past Default History</label>
+              <span class="value-display" id="history-val-display">2 defaults</span>
+            </div>
+            <div class="input-slider-wrapper">
+              <input type="range" class="slider-range" id="default-history-slider" min="0" max="6" value="2">
+              <input type="number" class="num-input" id="default-history-input" min="0" max="10" value="2">
+            </div>
+            <div class="error-msg" id="history-error">Default count must be non-negative (>= 0).</div>
+          </div>
+
+          <!-- Real-Time Financial Metric Ticker -->
+          <div class="ratio-ticker-grid">
+            <div class="ratio-item">
+              <span class="ratio-label">Loan-to-Income (DTI Proxy)</span>
+              <span class="ratio-val" id="dti-ratio-display">5.38x (High)</span>
+            </div>
+            <div class="ratio-item">
+              <span class="ratio-label">Credit Rating Tier</span>
+              <span class="ratio-val" id="credit-tier-display">Subprime (<620)</span>
+            </div>
+          </div>
+
+          <!-- Submission Button -->
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <div class="spinner"></div>
+            <span id="submit-btn-text">Execute Underwriting & SHAP Scoring</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Right Column: Real-Time Underwriting Assessment & XAI -->
+      <section class="card" id="results-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Underwriting Assessment & XAI
+          </div>
+          <span class="card-badge" id="audit-id-badge">Audit Log #1</span>
+        </div>
+
+        <!-- Gauge & Recommendation Overview -->
+        <div class="assessment-overview">
+          <div class="gauge-container">
+            <svg class="gauge-svg" viewBox="0 0 160 160">
+              <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+              <circle class="gauge-progress" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="gauge-center-text">
+              <div class="gauge-prob" id="prob-percentage">--%</div>
+              <div class="gauge-label">Default Risk</div>
+            </div>
+          </div>
+
+          <div class="decision-summary">
+            <span class="risk-tier-pill tier-high" id="risk-tier-pill">HIGH RISK</span>
+            <div class="decision-action-title" id="decision-action-title">Adverse Action Notice (Decline)</div>
+            <p class="decision-rationale" id="decision-rationale">
+              The applicant exhibits an elevated default probability. In compliance with RBI Fair Lending mandates, the top adverse factors driving this score are detailed below.
+            </p>
+          </div>
+        </div>
+
+        <!-- Top 3 SHAP Adverse Risk Factors -->
+        <div class="shap-section-title">
+          <span>Top 3 Adverse SHAP Risk Factors</span>
+          <div class="shap-legend">
+            <div class="legend-item"><span class="legend-dot-adverse"></span> Adverse (Raises Risk)</div>
+            <div class="legend-item"><span class="legend-dot-protective"></span> Protective (Lowers Risk)</div>
+          </div>
+        </div>
+
+        <div class="shap-cards-list" id="shap-factors-container">
+          <!-- Dynamically populated via app.js -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Section: Underwriting Decision Audit Log Table -->
+    <section class="card audit-table-card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <line x1="10" y1="9" x2="8" y2="9"></line>
+          </svg>
+          Recent Underwriting Decisions Audit Trail
+        </div>
+        <span class="card-badge">MySQL 3NF Persistence</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Audit ID</th>
+              <th>Applicant Age</th>
+              <th>Verified Income</th>
+              <th>Loan Amount</th>
+              <th>Credit Score</th>
+              <th>Past Defaults</th>
+              <th>Default Prob</th>
+              <th>Risk Tier</th>
+              <th>Primary Adverse Factor</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="audit-table-body">
+            <!-- Populated via app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal for Model Analytics & Visualizations -->
+  <div class="modal-backdrop" id="metrics-modal">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+      
+      <div class="card-title" style="margin-bottom: 0.5rem;">
+        Model Performance & Validation Analytics
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary);">
+        Model trained on 30,000 retail records with <code>scale_pos_weight = 2.9880</code> to manage financial class imbalance.
+      </p>
+
+      <div class="metrics-summary-grid">
+        <div class="metric-stat-box">
+          <div class="metric-stat-val" id="metric-roc-auc">0.8530</div>
+          <div class="metric-stat-label">ROC-AUC Score</div>
+        </div>
+        <div class="metric-stat-box">
+          <div class="metric-stat-val" id="metric-pr-auc">0.7092</div>
+          <div class="metric-stat-label">PR-AUC (Avg Prec)</div>
+        </div>
+        <div class="metric-stat-box">
+          <div class="metric-stat-val" id="metric-recall">71.14%</div>
+          <div class="metric-stat-label">Default Recall</div>
+        </div>
+        <div class="metric-stat-box">
+          <div class="metric-stat-val" id="metric-precision">57.25%</div>
+          <div class="metric-stat-label">Default Precision</div>
+        </div>
+      </div>
+
+      <div style="font-weight: 700; font-size: 0.95rem; margin-top: 1.5rem;">
+        Validation Discrimination Curves (Holdout Test Set: 6,000 Records)
+      </div>
+      <div class="artifact-image-container">
+        <img src="/model-artifacts/evaluation_metrics.png" alt="ROC & PR Evaluation Metrics">
+      </div>
+
+      <div style="font-weight: 700; font-size: 0.95rem; margin-top: 1.5rem;">
+        Global SHAP Feature Importance (TreeExplainer)
+      </div>
+      <div class="artifact-image-container">
+        <img src="/model-artifacts/shap_summary.png" alt="SHAP Global Summary Beeswarm">
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

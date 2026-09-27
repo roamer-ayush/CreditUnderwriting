@@ -245,13 +245,17 @@ This script will:
 5. Run `shap.TreeExplainer` and save global feature importance to `model/shap_summary.png`.
 6. Serialize `model/xgb_model.pkl`, `model/feature_columns.pkl`, and `model/model_metadata.json`.
 
-### Step 5: Start the FastAPI Underwriting Server
+### Step 5: Start the FastAPI Underwriting Server & Web Dashboard
 ```powershell
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Access the interactive Swagger UI documentation at:
-**[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
+1. **Interactive Web Dashboard**: Open **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)** in your browser.
+   - Live interactive sliders and borrower archetype presets (Prime, Borderline, Subprime).
+   - Real-time animated radial risk gauge and calibrated default probability.
+   - Interactive SHAP feature attribution bars with domain regulatory narratives.
+   - Real-time underwriting audit trail and model analytics modal with evaluation curves.
+2. **OpenAPI / Swagger UI Documentation**: Available at **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**.
 
 ---
 

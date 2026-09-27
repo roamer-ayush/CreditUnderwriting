@@ -15,7 +15,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from src.config import ENVIRONMENT
+from src.config import ENVIRONMENT, BASE_DIR
 from src.database import db_manager
 from src.predictor import UnderwritingPredictor
 from src.schemas import (
@@ -79,11 +79,39 @@ def startup_event():
             logger.error(f"Failed to load underwriting predictor on startup: {str(e)}")
 
 
-@app.get("/", tags=["General"])
-def root_endpoint():
-    """Root welcoming endpoint with quick links to interactive documentation."""
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
+
+# Mount static web assets and model artifacts
+STATIC_DIR = BASE_DIR / "static"
+MODEL_DIR = BASE_DIR / "model"
+
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+if MODEL_DIR.exists():
+    app.mount("/model-artifacts", StaticFiles(directory=str(MODEL_DIR)), name="model-artifacts")
+
+
+@app.get("/", tags=["Dashboard UI"])
+def serve_dashboard():
+    """Serve the interactive institutional credit underwriting dashboard."""
+    index_html = STATIC_DIR / "index.html"
+    if index_html.exists():
+        return FileResponse(str(index_html))
     return {
-        "message": "Welcome to the Explainable Credit Underwriting & Default Scoring API",
+        "message": "Welcome to the Explainable Credit Underwriting & Default Scoring Engine",
+        "documentation": "/docs",
+        "health_check": "/health",
+        "model_metrics": "/metrics",
+    }
+
+
+@app.get("/api", tags=["General"])
+def api_directory():
+    """API overview and quick link directory."""
+    return {
+        "name": "Explainable Credit Underwriting & Default Scoring Engine",
         "documentation": "/docs",
         "health_check": "/health",
         "model_metrics": "/metrics",
