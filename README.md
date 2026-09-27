@@ -11,6 +11,12 @@
 
 ---
 
+---
+
+https://creditunderwriting.onrender.com/
+
+---
+
 ## 1. Executive Summary & Problem Context
 
 In retail banking and credit underwriting, deploying black-box machine learning models poses severe regulatory and operational risks. Banking authorities (such as the Reserve Bank of India - RBI and Fair Lending directives) strictly mandate that **adverse credit decisions must be accompanied by explicit, actionable, and non-discriminatory reasons**. Furthermore, financial credit default datasets are inherently imbalanced (~10–15% default rates), making raw accuracy completely deceptive.
