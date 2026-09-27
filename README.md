@@ -9,7 +9,6 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.3-4479A1?logo=mysql&logoColor=white)](https://mysql.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
----
 
 ---
 
