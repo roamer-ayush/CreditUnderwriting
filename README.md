@@ -335,7 +335,44 @@ POST /predict
 
 ---
 
-## 9. Verification & Completion Checklist
+## 9. Production Deployment Guide
+
+This project is fully containerized and production-ready across multiple deployment architectures.
+
+### Option A: Docker Compose (Full Stack with MySQL 8.0)
+Spins up the FastAPI application and a dedicated MySQL 8 container with automatic schema provisioning:
+```powershell
+docker compose up --build -d
+```
+* **Web Service**: Accessible at `http://localhost:8000`
+* **MySQL Database**: Running on `localhost:3306` with persisted volume `mysql_data`
+* **Health Checks**: Automated container status polling via `/health`
+
+### Option B: Cloud Containers (Google Cloud Run / AWS ECS / Azure Container Apps)
+1. Build and push the Docker image:
+```bash
+docker build -t gcr.io/<YOUR-PROJECT>/credit-underwriting:latest .
+docker push gcr.io/<YOUR-PROJECT>/credit-underwriting:latest
+```
+2. Deploy as a managed serverless container:
+```bash
+gcloud run deploy credit-underwriting \
+  --image gcr.io/<YOUR-PROJECT>/credit-underwriting:latest \
+  --platform managed \
+  --allow-unauthenticated \
+  --set-env-vars DB_HOST=<CLOUD_SQL_IP>,DB_USER=<USER>,DB_PASSWORD=<PASS>,DB_NAME=credit_underwriting
+```
+
+### Option C: Platform as a Service (Render / Railway)
+* **Render**: Pre-configured via [`render.yaml`](render.yaml) blueprint. Link your repository, and Render automatically executes dependency installation, runs `train_model.py` to bake artifacts, and launches Uvicorn.
+* **Railway / Heroku**: Utilizes the included [`Procfile`](Procfile):
+  ```
+  web: uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2
+  ```
+
+---
+
+## 10. Verification & Completion Checklist
 
 | Phase | Milestone | Status | Notes |
 | :--- | :--- | :---: | :--- |
